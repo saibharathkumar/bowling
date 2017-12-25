@@ -1,10 +1,28 @@
+<style>
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+</style>
+
 <div style="height: 300px;  width: 80%">
   <div>
     <h1>Games <%= button_to  'Start new game', new_game_path, :method => "get"%></h1>
     <div style="display: flex;justify-content: space-between;">
       <div>
         <h3>
-        Before starting a game, please add players first.
+        Start game by adding players.
         </h3>
       </div>
       <div>
@@ -13,68 +31,42 @@
     </div>
   </div>
   <br>
+  <hr>
   <% @games.each do |game| %>
-  <div class="card">
-    <section class="card-info card-section">
-      
-      <section class="statistics">
-        <article class="statistic">
-          <h4 class="statistic-title">
-          Turn
-          </h4>
-          <h3 class="statistic-value">
-          <%= game.game_turn %>
-          </h3>
-        </article>
-        
-        <article class="statistic">
-          <h4 class="statistic-title">
-          Winner
-          </h4>
-          <h3 class="statistic-value">
-          <% if !(game.winner.empty?) %>
-          <%= Player.find(game.winner.keys.first).name %>
-          <% end %>
-          </h3>
-        </article>
-      </section>
-      
-      <div class="dial">
-        <h2 class="dial-title">
-        <%= button_to "Start Bowling", game_frames_path(game.id), :method => "get" %>
-        </h2>
-        <h3>
-        Game#
-        <%= game.id %>
-        </h3>
-      </div>
-    </section>
-    <section class="card-details card-section">
-      
-      <nav class="menu">
-        <article class="menu-item menu-item-active">
-          Player
-        </article>
-        <article class="menu-item">
-          Total Score
-        </article>
-      </nav>
-      
-      <dl class="leaderboard">
-        <% game.score_board.each do |k,v|%>
-        <dt>
-        <article class="progress">
-        <section class="progress-bar" style="width: 85%;"></section>
-      </article>
-      </dt>
-      <dd>
-      <div class="leaderboard-name"><%= Player.find(k).name %></div>
-      <div class="leaderboard-value"><%= v %></div>
-      </dd>
+  <div>
+    <div>
+      <h1>Game <%= game.id %></h1>
+    </div>
+    <p><h2>Results</h2></p>
+    <table>
+      <tr>
+        <th><b>Turn</b></th>
+        <th><b>Winner</b></th>
+      </tr>
+      <tr>
+        <td><h3><%= game.game_turn %></h3></td>
+        <td><h3><%= Player.find(game.winner.keys.first).name rescue "Yet to Decide" %></h3></td>
+      </tr>
+    </table>
+    <p><h2>Participants</h2></p>
+    <table>
+      <tr>
+        <th><b>Player</b></th>
+        <th><b>Score</b></th>
+      </tr>
+      <% game.score_board.each do |k,v|%>
+        <tr>
+          <td><h3><%= Player.find(k).name %></h3></td>
+          <td><h3><%= v %></h3></td>
+        </tr>
       <% end %>
-    </dl>
-  </section>
+    </table>
+    <br>
+    <div>
+      <%= button_to "Start Bowling", game_frames_path(game.id), :method => "get" %>
+    </div>    
 </div>
 <br>
+<hr>
 <% end %>
 </div>
