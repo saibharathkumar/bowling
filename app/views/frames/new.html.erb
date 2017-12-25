@@ -1,0 +1,5 @@
+<h1 class= "header">Play your frame</h1>
+<%= render 'form', frame: @frame  %>
+<div >
+<%= button_to  'Back to Player Dashboard', game_frames_path(@game_id), :method => "get" %>
+</div>
